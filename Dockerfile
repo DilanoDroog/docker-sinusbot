@@ -38,7 +38,8 @@ RUN mkdir -p "$TS3BOT_DIR" "$TS3_CLIENTDIR"
 RUN wget -q -O - "$BOT_URL" | tar -xjf - -C "$TS3BOT_DIR"
 
 RUN cp "$TS3BOT_DIR/config.ini.dist" "$TS3BOT_DIR/config.ini"
-RUN sed -i "s|SampleInterval = .*|SampleInterval = \"500\"|g" "$TS3BOT_DIR/config.ini"
+
+RUN sed -i "s|SampleInterval = .*|SampleInterval = 500|g" "$TS3BOT_DIR/config.ini"
 RUN sed -i "s|TS3Path = .*|TS3Path = \"$TS3_CLIENTDIR/ts3client_linux_amd64\"|g" "$TS3BOT_DIR/config.ini"
 RUN sed -i "s|YoutubeDLPath = .*|YoutubeDLPath = \"$YTDL_BIN\"|g" "$TS3BOT_DIR/config.ini"
 
