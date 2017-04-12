@@ -1,6 +1,6 @@
 FROM ubuntu:14.04
 
-MAINTAINER version: 0.2
+MAINTAINER version: 0.3
 
 ENV USER            "bot"
 ENV GROUP           "bot"
@@ -28,27 +28,19 @@ libglib2.0-0 \
 nano \
 python 
 
-RUN groupadd -g 3000 -r "$USER"
-RUN useradd -u 3000 -r -g "$GROUP" -d "$TS3BOT_DIR" "$USER"
-
-RUN wget -q -O "$YTDL_BIN" "$YTDL_FILE"
-RUN chmod a+rx "$YTDL_BIN"
-
-RUN mkdir -p "$TS3BOT_DIR" "$TS3_CLIENTDIR"
-RUN wget -q -O - "$BOT_URL" | tar -xjf - -C "$TS3BOT_DIR"
-
-RUN cp "$TS3BOT_DIR/config.ini.dist" "$TS3BOT_DIR/config.ini"
-
-RUN sed -i "s|SampleInterval = .*|SampleInterval = 500|g" "$TS3BOT_DIR/config.ini"
-RUN sed -i "s|TS3Path = .*|TS3Path = \"$TS3_CLIENTDIR/ts3client_linux_amd64\"|g" "$TS3BOT_DIR/config.ini"
-RUN sed -i "s|YoutubeDLPath = .*|YoutubeDLPath = \"$YTDL_BIN\"|g" "$TS3BOT_DIR/config.ini"
-
-RUN wget -q -O - "$TS3_CLIENT" | tail -c +25000 | tar xzf - -C "$TS3_CLIENTDIR"
-RUN cp "$TS3BOT_DIR/plugin/libsoundbot_plugin.so" "$TS3_CLIENTDIR/plugins"
-
-RUN chown -R "$USER":"$GROUP" "$TS3BOT_DIR"
-RUN chmod 775 "$TS3BOT_DIR/sinusbot"
-
+RUN groupadd -g 3000 -r "$USER" && \ 
+useradd -u 3000 -r -g "$GROUP" -d "$TS3BOT_DIR" "$USER" && \
+wget -q -O "$YTDL_BIN" "$YTDL_FILE" && chmod a+rx "$YTDL_BIN" && \
+mkdir -p "$TS3BOT_DIR" "$TS3_CLIENTDIR" && \
+wget -q -O - "$BOT_URL" | tar -xjf - -C "$TS3BOT_DIR" && \
+cp "$TS3BOT_DIR/config.ini.dist" "$TS3BOT_DIR/config.ini" && \
+sed -i "s|SampleInterval = .*|SampleInterval = 500|g" "$TS3BOT_DIR/config.ini" && \
+sed -i "s|TS3Path = .*|TS3Path = \"$TS3_CLIENTDIR/ts3client_linux_amd64\"|g" "$TS3BOT_DIR/config.ini" && \
+sed -i "s|YoutubeDLPath = .*|YoutubeDLPath = \"$YTDL_BIN\"|g" "$TS3BOT_DIR/config.ini" && \
+wget -q -O - "$TS3_CLIENT" | tail -c +25000 | tar xzf - -C "$TS3_CLIENTDIR" && \
+cp "$TS3BOT_DIR/plugin/libsoundbot_plugin.so" "$TS3_CLIENTDIR/plugins" && \
+chown -R "$USER":"$GROUP" "$TS3BOT_DIR" && \
+chmod 775 "$TS3BOT_DIR/sinusbot"
 
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
